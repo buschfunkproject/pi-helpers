@@ -1,0 +1,8 @@
+#!/bin/bash
+
+SERIALHEX=$(cat /proc/cpuinfo | grep Serial | cut -d ' ' -f 2 | sed 's/^0*//')
+
+raspi-config nonint do_hostname "$1$SERIALHEX"
+hostname -b "$1$SERIALHEX"
+systemctl restart avahi-daemon
+

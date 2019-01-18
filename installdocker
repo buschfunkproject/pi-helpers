@@ -1,0 +1,11 @@
+#!/bin/sh
+
+export DEBIAN_FRONTEND=noninteractive
+
+curl -fsSL get.docker.com -o get-docker.sh && sudo sh get-docker.sh
+
+sudo groupadd docker
+sudo gpasswd -a pi docker
+
+
+

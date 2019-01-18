@@ -1,0 +1,11 @@
+#!/bin/bash
+
+IFACE=$1
+ifconfig $IFACE down
+iwconfig $IFACE mode ad-hoc
+iwconfig $IFACE essid buschfunk.mesh
+
+A=$(printf "%d" 0x$(cat /sys/class/net/$IFACE/address | cut -d ":" -f 4))
+B=$(printf "%d" 0x$(cat /sys/class/net/$IFACE/address | cut -d ":" -f 5))
+C=$(printf "%d" 0x$(cat /sys/class/net/$IFACE/address | cut -d ":" -f 6))
+ifconfig $IFACE 10.$A.$B.$C/8 up
