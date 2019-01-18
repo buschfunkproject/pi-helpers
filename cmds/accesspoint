@@ -1,0 +1,49 @@
+#!/bin/bash
+
+ESSID=buschfunk.pub
+CHANNEL=8
+INTERFACE="wlan0"
+
+sysctl -w net.ipv4.ip_forward=1
+
+CPATH=/opt/etc/ap
+mkdir -p $CPATH
+
+
+cat <<- EOF > $CPATH/dnsmasq.conf
+interface=$INTERFACE
+ dhcp-range=172.16.23.100,172.16.23.200,255.255.255.0,24h
+
+address=/$ESSID/172.16.23.1
+address=/$(hostname)/172.16.23.1
+EOF
+
+cat <<- EOF > $CPATH/hostapd.conf
+interface=$INTERFACE
+driver=nl80211
+ssid=$ESSID
+hw_mode=g
+channel=$CHANNEL
+wmm_enabled=0
+macaddr_acl=0
+auth_algs=1
+ignore_broadcast_ssid=0
+wpa=0
+EOF
+
+systemctl stop dhcpcd.service
+systemctl stop dnsmasq.service
+systemctl stop hostapd.service
+
+ifconfig $INTERFACE 172.16.23.1/24
+
+hostapd -B $CPATH/hostapd.conf
+dnsmasq -i $INTERFACE -C $CPATH/dnsmasq.conf 
+
+
+iptables -t nat -A  POSTROUTING -o eth0 -j MASQUERADE
+#iptables -t nat -A  POSTROUTING -o wlan1 -j MASQUERADE
+
+
+
+
