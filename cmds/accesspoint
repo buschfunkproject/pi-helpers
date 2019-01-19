@@ -1,8 +1,8 @@
 #!/bin/bash
 
-ESSID=buschfunk.pub
-CHANNEL=8
-INTERFACE="wlan0"
+ESSID=$3
+CHANNEL=$2
+INTERFACE=$1
 
 sysctl -w net.ipv4.ip_forward=1
 
