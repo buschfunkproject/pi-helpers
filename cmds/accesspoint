@@ -31,7 +31,7 @@ ignore_broadcast_ssid=0
 wpa=0
 EOF
 
-systemctl stop dhcpcd.service
+#systemctl stop dhcpcd.service
 systemctl stop dnsmasq.service
 systemctl stop hostapd.service
 
