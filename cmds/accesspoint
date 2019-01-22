@@ -31,7 +31,7 @@ ignore_broadcast_ssid=0
 wpa=0
 EOF
 
-#systemctl stop dhcpcd.service
+systemctl stop dhcpcd.service
 systemctl stop dnsmasq.service
 systemctl stop hostapd.service
 
@@ -40,6 +40,7 @@ ifconfig $INTERFACE 172.16.23.1/24
 hostapd -B $CPATH/hostapd.conf
 dnsmasq -i $INTERFACE -C $CPATH/dnsmasq.conf 
 
+dhcpcd -Z wlan*
 
 iptables -t nat -A  POSTROUTING -o eth0 -j MASQUERADE
 #iptables -t nat -A  POSTROUTING -o wlan1 -j MASQUERADE
