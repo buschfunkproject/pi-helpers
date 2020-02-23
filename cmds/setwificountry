@@ -1,0 +1,3 @@
+#!/bin/sh
+
+raspi-config nonint do_wifi_country $1
